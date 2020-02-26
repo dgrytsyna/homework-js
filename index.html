@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 offset-sm-2 jumbotron p-3">
+          <h1 class="display-4 text-center mb-3">Randome qoute</h1>
+          <p>
+            <img
+              alt=""
+              src="http://i0.kym-cdn.com/entries/icons/original/000/023/463/6360103332924270401274957217_Ron.jpg"
+              class="img-fluid img-thumbnail"
+              id="main-image"
+            />
+          </p>
+
+          <blockquote
+            class="blockquote text-center border border-info text-secondary p-3"
+          >
+            <p>
+              Author: <span id="img-author"> </span> <br />
+              Width: <span id="img-width"></span> <br />
+              Height: <span id="img-height"></span> <br />
+              Format: <span id="img-format"></span> <br />
+              FileName: <span id="img-name"></span> <br />
+              Author URL: <span id="img-author-url"></span>
+            </p>
+          </blockquote>
+
+          <button class="btn btn-info" id="button-img" data-more-image>
+            Get image
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let img = document.getElementById("main-image");
+      let button = document.getElementById("button-img");
+      let imgAuthor = document.getElementById("img-author");
+      let imgWidth = document.getElementById("img-width");
+      let imgHeight = document.getElementById("img-height");
+      let imgFormat = document.getElementById("img-format");
+      let imgName = document.getElementById("img-name");
+      let imgUrl = document.getElementById("img-author-url");
+      let clicks = function(event) {
+        if (!event.target.matches("[data-more-image]")) return;
+        getImage();
+      };
+      document.addEventListener("click", clicks);
+      let getImage = function() {
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://picsum.photos/list");
+        xhr.send();
+        xhr.onload = function() {
+          if (xhr.status != 200) {
+            alert("Ошибка" + xhr.status);
+            return;
+          }
+          let newImage = JSON.parse(xhr.response);
+          const min = 0,
+            max = 1084;
+          const i = Math.floor(Math.random() * (max - min + 1)) + min;
+          const img = document.querySelector("img");
+          img.src = "https://picsum.photos/1200/400?image=" + newImage[i].id;
+          imgAuthor.textContent = newImage[i].author;
+          imgWidth.textContent = newImage[i].width;
+          imgHeight.textContent = newImage[i].height;
+          imgFormat.textContent = newImage[i].format;
+          imgName.textContent = newImage[i].filename;
+          imgUrl.textContent = newImage[i].author_url;
+        };
+      };
+    </script>
+  </body>
+</html>
